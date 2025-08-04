@@ -9,9 +9,16 @@ import {
   Send,
   Minimize2,
   Maximize2,
-  Sparkles
+  Sparkles,
+  Mic,
+  MicOff,
+  Volume2,
+  VolumeX,
+  Settings
 } from "lucide-react";
-import { useState } from "react";
+import { useState, useCallback, useEffect } from "react";
+import { useConversation } from "@11labs/react";
+import { useLocalStorage } from "react-use";
 
 interface ClaudeMessage {
   role: 'user' | 'assistant';
@@ -29,6 +36,21 @@ export const ClaudePanel = () => {
     }
   ]);
   const [inputMessage, setInputMessage] = useState('');
+  const [isListening, setIsListening] = useState(false);
+  const [isSpeaking, setIsSpeaking] = useState(false);
+  const [volume, setVolume] = useLocalStorage("claude-volume", 0.7);
+  const [apiKey, setApiKey] = useLocalStorage<string>("elevenlabs-api-key", "");
+  const [showSettings, setShowSettings] = useState(false);
+
+  const conversation = useConversation({
+    onConnect: () => console.log("Connected to ElevenLabs"),
+    onDisconnect: () => setIsListening(false),
+    onMessage: (message) => {
+      console.log("ElevenLabs message:", message);
+      setIsSpeaking(true);
+    },
+    onError: (error) => console.error("ElevenLabs error:", error)
+  });
 
   const quickPrompts = [
     "What is GILC's mission?",
@@ -39,7 +61,7 @@ export const ClaudePanel = () => {
     "How to contribute a scroll?"
   ];
 
-  const handleSendMessage = () => {
+  const handleSendMessage = useCallback(async () => {
     if (!inputMessage.trim()) return;
     
     const userMessage: ClaudeMessage = {
@@ -47,6 +69,21 @@ export const ClaudePanel = () => {
       content: inputMessage,
       timestamp: new Date().toLocaleTimeString()
     };
+    
+    setMessages(prev => [...prev, userMessage]);
+    
+    // If we have ElevenLabs API key and voice is enabled, use voice
+    if (apiKey && conversation) {
+      try {
+        // Send message to voice conversation
+        await conversation.startSession({ 
+          // This would need a signed URL in production
+          agentId: "demo-agent-id" 
+        });
+      } catch (error) {
+        console.error("Voice conversation error:", error);
+      }
+    }
     
     // Simulate Claude response
     const responses = [
@@ -62,9 +99,51 @@ export const ClaudePanel = () => {
       timestamp: new Date().toLocaleTimeString()
     };
     
-    setMessages(prev => [...prev, userMessage, assistantMessage]);
+    setMessages(prev => [...prev, assistantMessage]);
+    
+    // Speak the response if voice is enabled
+    if ('speechSynthesis' in window && isSpeaking) {
+      const utterance = new SpeechSynthesisUtterance(assistantMessage.content);
+      utterance.volume = volume || 0.7;
+      utterance.rate = 0.9;
+      speechSynthesis.speak(utterance);
+    }
+    
     setInputMessage('');
-  };
+  }, [inputMessage, apiKey, conversation, volume, isSpeaking]);
+
+  const toggleVoiceListening = useCallback(async () => {
+    if (!isListening) {
+      if (!('webkitSpeechRecognition' in window || 'SpeechRecognition' in window)) {
+        alert("Speech recognition not supported in this browser");
+        return;
+      }
+
+      const SpeechRecognition = window.webkitSpeechRecognition || window.SpeechRecognition;
+      const recognition = new SpeechRecognition();
+      
+      recognition.continuous = false;
+      recognition.interimResults = false;
+      recognition.lang = 'en-US';
+
+      recognition.onstart = () => setIsListening(true);
+      recognition.onend = () => setIsListening(false);
+      
+      recognition.onresult = (event) => {
+        const transcript = event.results[0][0].transcript;
+        setInputMessage(transcript);
+      };
+
+      recognition.onerror = (event) => {
+        console.error("Speech recognition error:", event.error);
+        setIsListening(false);
+      };
+
+      recognition.start();
+    } else {
+      setIsListening(false);
+    }
+  }, [isListening]);
 
   const handleQuickPrompt = (prompt: string) => {
     setInputMessage(prompt);
@@ -186,24 +265,66 @@ export const ClaudePanel = () => {
           )}
           
           {/* Input Area */}
-          <div className="flex gap-2">
-            <div className="flex-1 relative">
-              <input
-                type="text"
-                value={inputMessage}
-                onChange={(e) => setInputMessage(e.target.value)}
-                onKeyPress={(e) => e.key === 'Enter' && handleSendMessage()}
-                placeholder="Ask about GILC, scrolls, or ethics..."
-                className="w-full px-3 py-2 bg-muted/20 border border-border/50 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-scroll-violet/50 focus:border-scroll-violet"
-              />
+          <div className="space-y-2">
+            <div className="flex gap-2">
+              <div className="flex-1 relative">
+                <input
+                  type="text"
+                  value={inputMessage}
+                  onChange={(e) => setInputMessage(e.target.value)}
+                  onKeyPress={(e) => e.key === 'Enter' && handleSendMessage()}
+                  placeholder="Ask about GILC, scrolls, or ethics..."
+                  className={`w-full px-3 py-2 bg-muted/20 border border-border/50 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-scroll-violet/50 focus:border-scroll-violet ${isListening ? 'voice-listening' : ''}`}
+                />
+              </div>
+              <Button 
+                onClick={toggleVoiceListening} 
+                size="sm"
+                variant={isListening ? "destructive" : "outline"}
+                className="px-3"
+              >
+                {isListening ? <MicOff className="w-4 h-4" /> : <Mic className="w-4 h-4" />}
+              </Button>
+              <Button
+                onClick={handleSendMessage}
+                disabled={!inputMessage.trim()}
+                className="btn-scroll px-3"
+              >
+                <Send className="w-4 h-4" />
+              </Button>
             </div>
-            <Button
-              onClick={handleSendMessage}
-              disabled={!inputMessage.trim()}
-              className="btn-scroll px-3"
-            >
-              <Send className="w-4 h-4" />
-            </Button>
+
+            <div className="flex items-center justify-between text-xs text-muted-foreground">
+              <div className="flex items-center space-x-2">
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={() => setIsSpeaking(!isSpeaking)}
+                  className="h-6 px-2"
+                >
+                  {isSpeaking ? <Volume2 className="w-3 h-3" /> : <VolumeX className="w-3 h-3" />}
+                </Button>
+                {isSpeaking && (
+                  <input
+                    type="range"
+                    min="0"
+                    max="1"
+                    step="0.1"
+                    value={volume}
+                    onChange={(e) => setVolume(parseFloat(e.target.value))}
+                    className="w-16 h-1 bg-muted rounded-lg appearance-none cursor-pointer"
+                  />
+                )}
+              </div>
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={() => setShowSettings(!showSettings)}
+                className="h-6 px-2"
+              >
+                <Settings className="w-3 h-3" />
+              </Button>
+            </div>
           </div>
           
           {/* Agent Capabilities */}
