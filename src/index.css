@@ -2,41 +2,85 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Definition of the design system. All colors, gradients, fonts, etc should be defined here. 
-All colors MUST be HSL.
-*/
+/* GILC Quantum Design System - Academic & Cybernetic Excellence */
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Literata:ital,opsz,wght@0,7..72,400;0,7..72,500;0,7..72,600;0,7..72,700;1,7..72,400&display=swap');
 
 @layer base {
   :root {
-    --background: 0 0% 100%;
-    --foreground: 222.2 84% 4.9%;
-
-    --card: 0 0% 100%;
-    --card-foreground: 222.2 84% 4.9%;
-
-    --popover: 0 0% 100%;
-    --popover-foreground: 222.2 84% 4.9%;
-
-    --primary: 222.2 47.4% 11.2%;
+    /* Core Academic Palette */
+    --background: 240 8% 4%;
+    --foreground: 210 40% 98%;
+    
+    /* Quantum Cards & Surfaces */
+    --card: 240 6% 6%;
+    --card-foreground: 210 40% 98%;
+    
+    /* Interactive Elements */
+    --popover: 240 6% 8%;
+    --popover-foreground: 210 40% 98%;
+    
+    /* GILC Primary - Midnight Academic */
+    --primary: 240 6% 12%;
     --primary-foreground: 210 40% 98%;
-
-    --secondary: 210 40% 96.1%;
-    --secondary-foreground: 222.2 47.4% 11.2%;
-
-    --muted: 210 40% 96.1%;
-    --muted-foreground: 215.4 16.3% 46.9%;
-
-    --accent: 210 40% 96.1%;
-    --accent-foreground: 222.2 47.4% 11.2%;
-
-    --destructive: 0 84.2% 60.2%;
+    
+    /* Scroll Violet Secondary */
+    --secondary: 260 60% 15%;
+    --secondary-foreground: 210 40% 98%;
+    
+    /* Logic Gray Muted */
+    --muted: 240 4% 16%;
+    --muted-foreground: 215 20.2% 65.1%;
+    
+    /* Cyber Green Accent */
+    --accent: 142 76% 36%;
+    --accent-foreground: 142 84% 8%;
+    
+    /* Scroll Violet Special */
+    --scroll-violet: 260 60% 55%;
+    --scroll-violet-foreground: 260 84% 8%;
+    
+    /* Golden Ratio Highlights */
+    --golden: 45 93% 58%;
+    --golden-foreground: 45 84% 8%;
+    
+    /* Ivory Soft */
+    --ivory: 45 29% 97%;
+    --ivory-foreground: 240 6% 12%;
+    
+    /* Status & Actions */
+    --destructive: 0 62.8% 50%;
     --destructive-foreground: 210 40% 98%;
-
-    --border: 214.3 31.8% 91.4%;
-    --input: 214.3 31.8% 91.4%;
-    --ring: 222.2 84% 4.9%;
-
-    --radius: 0.5rem;
+    
+    --success: 142 76% 36%;
+    --success-foreground: 142 84% 8%;
+    
+    --warning: 45 93% 58%;
+    --warning-foreground: 45 84% 8%;
+    
+    /* Borders & Inputs */
+    --border: 240 4% 16%;
+    --input: 240 4% 16%;
+    --ring: 260 60% 55%;
+    
+    /* Geometry */
+    --radius: 0.75rem;
+    
+    /* Quantum Gradients */
+    --gradient-quantum: linear-gradient(135deg, hsl(var(--primary)), hsl(var(--scroll-violet)));
+    --gradient-logic: linear-gradient(90deg, hsl(var(--accent)), hsl(var(--golden)));
+    --gradient-cybernetic: linear-gradient(180deg, hsl(var(--scroll-violet)), hsl(var(--primary)));
+    --gradient-scroll: linear-gradient(45deg, hsl(var(--scroll-violet)), hsl(var(--golden)));
+    
+    /* Elevations & Shadows */
+    --shadow-quantum: 0 25px 50px -12px hsl(var(--scroll-violet) / 0.25);
+    --shadow-logic: 0 10px 40px -10px hsl(var(--accent) / 0.3);
+    --shadow-glow: 0 0 60px hsl(var(--golden) / 0.2);
+    
+    /* Animations */
+    --transition-quantum: all 0.6s cubic-bezier(0.23, 1, 0.32, 1);
+    --transition-scroll: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    --transition-logic: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
 
     --sidebar-background: 0 0% 98%;
 
@@ -100,6 +144,147 @@ All colors MUST be HSL.
   }
 
   body {
-    @apply bg-background text-foreground;
+    @apply bg-background text-foreground font-inter;
+    font-feature-settings: "cv11", "ss01";
+    font-optical-sizing: auto;
+  }
+  
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-literata;
+    font-optical-sizing: auto;
+  }
+}
+
+@layer components {
+  /* Quantum Button Variants */
+  .btn-quantum {
+    @apply relative overflow-hidden bg-gradient-to-r from-scroll-violet to-golden;
+    @apply text-scroll-violet-foreground font-medium px-8 py-4 rounded-xl;
+    @apply transition-all duration-500 hover:scale-105 hover:shadow-quantum;
+    @apply before:absolute before:inset-0 before:bg-gradient-to-r before:from-golden before:to-scroll-violet;
+    @apply before:opacity-0 hover:before:opacity-100 before:transition-opacity before:duration-300;
+  }
+  
+  .btn-scroll {
+    @apply bg-card border border-scroll-violet/20 text-foreground;
+    @apply px-6 py-3 rounded-lg font-medium transition-quantum;
+    @apply hover:border-scroll-violet hover:bg-scroll-violet/5 hover:shadow-logic;
+  }
+  
+  .btn-logic {
+    @apply bg-accent text-accent-foreground px-6 py-3 rounded-lg;
+    @apply font-medium transition-logic hover:shadow-logic hover:scale-105;
+  }
+  
+  /* Logic Matrix Background */
+  .logic-matrix {
+    background-image: 
+      radial-gradient(circle at 25% 25%, hsl(var(--scroll-violet) / 0.1) 0%, transparent 50%),
+      radial-gradient(circle at 75% 75%, hsl(var(--accent) / 0.1) 0%, transparent 50%),
+      linear-gradient(45deg, hsl(var(--primary) / 0.02) 0%, transparent 100%);
+  }
+  
+  /* Scroll Glyph Animations */
+  .scroll-glyph {
+    @apply text-scroll-violet/30 transition-all duration-700;
+    animation: float 6s ease-in-out infinite;
+  }
+  
+  .scroll-glyph:hover {
+    @apply text-scroll-violet scale-110;
+    filter: drop-shadow(0 0 20px hsl(var(--scroll-violet) / 0.5));
+  }
+  
+  /* Quantum Card Styles */
+  .quantum-card {
+    @apply bg-card/80 backdrop-blur-sm border border-border/50;
+    @apply rounded-xl p-6 transition-quantum hover:shadow-quantum;
+    @apply hover:border-scroll-violet/30 hover:bg-card/90;
+  }
+  
+  /* Academic Heading Styles */
+  .heading-academic {
+    @apply font-literata font-semibold tracking-tight;
+    background: var(--gradient-scroll);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  
+  /* ScrollDNA Hash Display */
+  .scroll-hash {
+    @apply font-mono text-xs text-muted-foreground bg-muted/50;
+    @apply px-2 py-1 rounded border border-border/50;
+  }
+  
+  /* Ethics Badge */
+  .ethics-badge {
+    @apply inline-flex items-center gap-2 bg-success/10 text-success;
+    @apply px-3 py-1 rounded-full border border-success/20 text-sm font-medium;
+  }
+  
+  /* DAO Status Indicator */
+  .dao-status {
+    @apply inline-flex items-center gap-2 text-golden font-medium;
+    animation: pulse-glow 2s ease-in-out infinite;
+  }
+}
+
+@layer utilities {
+  /* Typography System */
+  .font-inter { font-family: 'Inter', system-ui, sans-serif; }
+  .font-literata { font-family: 'Literata', 'Times New Roman', serif; }
+  
+  /* Color Extensions */
+  .text-scroll-violet { color: hsl(var(--scroll-violet)); }
+  .text-golden { color: hsl(var(--golden)); }
+  .text-ivory { color: hsl(var(--ivory)); }
+  .bg-scroll-violet { background-color: hsl(var(--scroll-violet)); }
+  .bg-golden { background-color: hsl(var(--golden)); }
+  .bg-ivory { background-color: hsl(var(--ivory)); }
+  .border-scroll-violet { border-color: hsl(var(--scroll-violet)); }
+  
+  /* Gradient Utilities */
+  .bg-gradient-quantum { background: var(--gradient-quantum); }
+  .bg-gradient-logic { background: var(--gradient-logic); }
+  .bg-gradient-cybernetic { background: var(--gradient-cybernetic); }
+  .bg-gradient-scroll { background: var(--gradient-scroll); }
+  
+  /* Shadow Extensions */
+  .shadow-quantum { box-shadow: var(--shadow-quantum); }
+  .shadow-logic { box-shadow: var(--shadow-logic); }
+  .shadow-glow { box-shadow: var(--shadow-glow); }
+  
+  /* Transition Extensions */
+  .transition-quantum { transition: var(--transition-quantum); }
+  .transition-scroll { transition: var(--transition-scroll); }
+  .transition-logic { transition: var(--transition-logic); }
+}
+
+/* Keyframe Animations */
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-10px); }
+}
+
+@keyframes pulse-glow {
+  0%, 100% { opacity: 1; filter: drop-shadow(0 0 5px hsl(var(--golden) / 0.3)); }
+  50% { opacity: 0.8; filter: drop-shadow(0 0 15px hsl(var(--golden) / 0.6)); }
+}
+
+@keyframes logic-grid {
+  0% { opacity: 0.1; transform: scale(1); }
+  50% { opacity: 0.3; transform: scale(1.05); }
+  100% { opacity: 0.1; transform: scale(1); }
+}
+
+@keyframes scroll-unfold {
+  0% { 
+    opacity: 0; 
+    transform: rotateX(-90deg) scale(0.8); 
+  }
+  100% { 
+    opacity: 1; 
+    transform: rotateX(0deg) scale(1); 
   }
 }

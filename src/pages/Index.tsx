@@ -1,12 +1,23 @@
-// Update this page (the content is just a fallback if you fail to update the page)
+import { ScrollHero } from "@/components/ScrollHero";
+import { ScrollMission } from "@/components/ScrollMission";
+import { PillarsOfCivilization } from "@/components/PillarsOfCivilization";
+import { ScrollDNAViewer } from "@/components/ScrollDNAViewer";
+import { GlobalScrollMap } from "@/components/GlobalScrollMap";
+import { LegalEthicsSection } from "@/components/LegalEthicsSection";
+import { ClaudePanel } from "@/components/ClaudePanel";
+import { Footer } from "@/components/Footer";
 
 const Index = () => {
   return (
-    <div className="min-h-screen flex items-center justify-center bg-background">
-      <div className="text-center">
-        <h1 className="text-4xl font-bold mb-4">Welcome to Your Blank App</h1>
-        <p className="text-xl text-muted-foreground">Start building your amazing project here!</p>
-      </div>
+    <div className="min-h-screen bg-background">
+      <ScrollHero />
+      <ScrollMission />
+      <PillarsOfCivilization />
+      <ScrollDNAViewer />
+      <GlobalScrollMap />
+      <LegalEthicsSection />
+      <Footer />
+      <ClaudePanel />
     </div>
   );
 };
