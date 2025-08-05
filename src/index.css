@@ -71,6 +71,12 @@
     --gradient-logic: linear-gradient(90deg, hsl(var(--accent)), hsl(var(--golden)));
     --gradient-cybernetic: linear-gradient(180deg, hsl(var(--scroll-violet)), hsl(var(--primary)));
     --gradient-scroll: linear-gradient(45deg, hsl(var(--scroll-violet)), hsl(var(--golden)));
+    --gradient-knowledge: linear-gradient(135deg, hsl(var(--scroll-violet)), hsl(var(--golden)));
+    --gradient-agents: linear-gradient(135deg, hsl(var(--accent)), hsl(var(--scroll-violet)));
+    
+    /* Quantum system colors */
+    --cyber-green: 142 76% 36%;
+    --quantum-blue: 217 91% 60%;
     
     /* Elevations & Shadows */
     --shadow-quantum: 0 25px 50px -12px hsl(var(--scroll-violet) / 0.25);
@@ -265,6 +271,28 @@
 
   .voice-speaking {
     animation: quantum-fade 0.5s ease-in-out infinite alternate;
+  }
+
+  /* Quantum Node Styles */
+  .quantum-node {
+    @apply relative p-2 rounded-lg border transition-all duration-200;
+    min-width: 120px;
+  }
+
+  .quantum-node.selected {
+    @apply border-scroll-violet shadow-lg;
+  }
+
+  .quantum-node .node-header {
+    @apply flex items-center gap-2 mb-1;
+  }
+
+  .quantum-node .node-content {
+    @apply space-y-1;
+  }
+
+  .quantum-flow {
+    @apply w-full h-full;
   }
 }
 

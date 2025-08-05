@@ -5,6 +5,9 @@ import { ScrollDNAViewer } from "@/components/ScrollDNAViewer";
 import { GlobalScrollMap } from "@/components/GlobalScrollMap";
 import { LegalEthicsSection } from "@/components/LegalEthicsSection";
 import { ClaudePanel } from "@/components/ClaudePanel";
+import { QuantumKnowledgeEngine } from "@/components/QuantumKnowledgeEngine";
+import { MultiAgentOrchestrator } from "@/components/MultiAgentOrchestrator";
+import { QuantumVisualizationDashboard } from "@/components/QuantumVisualizationDashboard";
 import { Footer } from "@/components/Footer";
 import { AdaptiveSidebar } from "@/components/AdaptiveSidebar";
 
@@ -34,6 +37,9 @@ const Index = () => {
         <Footer />
       </div>
       <ClaudePanel />
+      <QuantumKnowledgeEngine />
+      <MultiAgentOrchestrator />
+      <QuantumVisualizationDashboard />
     </div>
   );
 };
