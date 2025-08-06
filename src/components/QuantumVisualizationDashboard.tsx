@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect, useMemo, Suspense } from "react";
-import { Canvas, useFrame, useThree } from '@react-three/fiber';
-import { OrbitControls, Text, Sphere, Line } from '@react-three/drei';
+// import { Canvas, useFrame, useThree } from '@react-three/fiber';
+// import { OrbitControls, Text, Sphere, Line } from '@react-three/drei';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -19,7 +19,7 @@ import {
   GitBranch
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
-import * as THREE from 'three';
+// import * as THREE from 'three';
 
 // Quantum State Data Structures
 interface QuantumNode {
@@ -49,7 +49,8 @@ interface InstitutionalMetrics {
   neuralActivity: number;
 }
 
-// 3D Quantum Node Component
+// Temporarily disabled Three.js components while dependencies resolve
+/*
 const QuantumNodeMesh = ({ node, selected, onClick }: { 
   node: QuantumNode; 
   selected: boolean; 
@@ -72,11 +73,11 @@ const QuantumNodeMesh = ({ node, selected, onClick }: {
 
   const getNodeColor = () => {
     switch (node.type) {
-      case 'scroll': return '#8B5FE6'; // scroll-violet
-      case 'dao': return '#10B981'; // cyber-green  
-      case 'agent': return '#F59E0B'; // golden
-      case 'synthesis': return '#3B82F6'; // quantum-blue
-      case 'user': return '#EF4444'; // red
+      case 'scroll': return '#8B5FE6';
+      case 'dao': return '#10B981';
+      case 'agent': return '#F59E0B';
+      case 'synthesis': return '#3B82F6';
+      case 'user': return '#EF4444';
       default: return '#6B7280';
     }
   };
@@ -119,7 +120,6 @@ const QuantumNodeMesh = ({ node, selected, onClick }: {
   );
 };
 
-// 3D Quantum Connection Component
 const QuantumConnection3D = ({ connection, nodes }: { 
   connection: QuantumConnection; 
   nodes: QuantumNode[];
@@ -155,7 +155,6 @@ const QuantumConnection3D = ({ connection, nodes }: {
   );
 };
 
-// Main 3D Scene Component
 const QuantumScene = ({ 
   nodes, 
   connections, 
@@ -179,7 +178,6 @@ const QuantumScene = ({
       <pointLight position={[10, 10, 10]} intensity={1} />
       <pointLight position={[-10, -10, -10]} intensity={0.5} color="#8B5FE6" />
       
-      {/* Quantum Field Background */}
       <Sphere args={[20]} position={[0, 0, 0]}>
         <meshBasicMaterial 
           color="#000020" 
@@ -189,7 +187,6 @@ const QuantumScene = ({
         />
       </Sphere>
       
-      {/* Nodes */}
       {nodes.map((node) => (
         <QuantumNodeMesh
           key={node.id}
@@ -199,7 +196,6 @@ const QuantumScene = ({
         />
       ))}
       
-      {/* Connections */}
       {connections.map((connection, index) => (
         <QuantumConnection3D
           key={`${connection.from}-${connection.to}-${index}`}
@@ -218,6 +214,7 @@ const QuantumScene = ({
     </>
   );
 };
+*/
 
 // Generate sample quantum data
 const generateQuantumData = (): { nodes: QuantumNode[]; connections: QuantumConnection[] } => {
