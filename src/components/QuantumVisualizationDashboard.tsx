@@ -393,7 +393,15 @@ export const QuantumVisualizationDashboard = () => {
             
             <TabsContent value="quantum" className="h-[calc(100%-3rem)] m-4 mt-0">
               <div className="h-full relative border border-border rounded-lg overflow-hidden">
-                <Suspense fallback={
+                <div className="w-full h-full flex items-center justify-center bg-muted/10">
+                  <div className="text-center">
+                    <div className="w-8 h-8 border-2 border-scroll-violet border-t-transparent rounded-full animate-spin mx-auto mb-2"></div>
+                    <div className="text-sm text-muted-foreground">Quantum Field Initializing...</div>
+                    <div className="text-xs text-muted-foreground mt-2">3D visualization loading</div>
+                  </div>
+                </div>
+                {/* Temporarily disabled Three.js Canvas while dependencies resolve */}
+                {/* <Suspense fallback={
                   <div className="w-full h-full flex items-center justify-center bg-muted/10">
                     <div className="text-center">
                       <div className="w-8 h-8 border-2 border-scroll-violet border-t-transparent rounded-full animate-spin mx-auto mb-2"></div>
@@ -412,7 +420,7 @@ export const QuantumVisualizationDashboard = () => {
                       onNodeSelect={setSelectedNode}
                     />
                   </Canvas>
-                </Suspense>
+                </Suspense> */}
                 
                 {/* Node Information Overlay */}
                 <AnimatePresence>
