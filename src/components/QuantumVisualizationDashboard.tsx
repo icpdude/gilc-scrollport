@@ -1,6 +1,6 @@
-import { useState, useRef, useEffect, useMemo } from "react";
+import { useState, useRef, useEffect, useMemo, Suspense } from "react";
 import { Canvas, useFrame, useThree } from '@react-three/fiber';
-import { OrbitControls, Text, Sphere, Box, Line } from '@react-three/drei';
+import { OrbitControls, Text, Sphere, Line } from '@react-three/drei';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -393,14 +393,26 @@ export const QuantumVisualizationDashboard = () => {
             
             <TabsContent value="quantum" className="h-[calc(100%-3rem)] m-4 mt-0">
               <div className="h-full relative border border-border rounded-lg overflow-hidden">
-                <Canvas camera={{ fov: 75, near: 0.1, far: 1000 }}>
-                  <QuantumScene
-                    nodes={nodes}
-                    connections={connections}
-                    selectedNode={selectedNode}
-                    onNodeSelect={setSelectedNode}
-                  />
-                </Canvas>
+                <Suspense fallback={
+                  <div className="w-full h-full flex items-center justify-center bg-muted/10">
+                    <div className="text-center">
+                      <div className="w-8 h-8 border-2 border-scroll-violet border-t-transparent rounded-full animate-spin mx-auto mb-2"></div>
+                      <div className="text-sm text-muted-foreground">Initializing Quantum Field...</div>
+                    </div>
+                  </div>
+                }>
+                  <Canvas 
+                    camera={{ fov: 75, near: 0.1, far: 1000 }}
+                    onError={(error) => console.error('Canvas error:', error)}
+                  >
+                    <QuantumScene
+                      nodes={nodes}
+                      connections={connections}
+                      selectedNode={selectedNode}
+                      onNodeSelect={setSelectedNode}
+                    />
+                  </Canvas>
+                </Suspense>
                 
                 {/* Node Information Overlay */}
                 <AnimatePresence>
